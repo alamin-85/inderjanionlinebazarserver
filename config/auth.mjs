@@ -17,6 +17,8 @@ export const auth = betterAuth({
     "http://localhost:4000",
     "http://localhost:8081",
      "http://localhost:8082",
+     "http://localhost:8083",
+     
     "https://inderjanionlinebazar.vercel.app",
     "inderjanionlinebazarapp://",
 
