@@ -14,16 +14,22 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
 
   trustedOrigins: [
-    "http://localhost:4000",
+    // Local Web
     "http://localhost:8081",
-     "http://localhost:8082",
-     "http://localhost:8083",
-     
+
+    // Production Web
     "https://inderjanionlinebazar.vercel.app",
+
+    // Expo App
     "inderjanionlinebazarapp://",
 
-    ...(process.env.NODE_ENV !== "production"
-      ? ["exp://", "exp://**"]
+    // Expo Go development
+    ...(process.env.ALLOW_EXPO_DEV_ORIGINS === "true"
+      ? [
+          "exp://",
+          "exp://**",
+          "exp://192.168.0.*:*/**",
+        ]
       : []),
   ],
 
@@ -51,7 +57,6 @@ export const auth = betterAuth({
     maxPasswordLength: 128,
   },
 
-  // Google Login
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
