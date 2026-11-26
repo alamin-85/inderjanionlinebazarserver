@@ -1,60 +1,4 @@
 
-// require("dotenv").config();
-
-// const express = require("express");
-// const cors = require("cors");
-// const { connectDB } = require("./config/db");
-
-// const productRoutes = require("./routes/productRoutes");
-// const orderRoutes = require("./routes/orderRoutes");
-// const categoryRoutes = require("./routes/categoryRoutes");
-
-// const app = express();
-// const PORT = process.env.PORT || 4000;
-
-// // Middleware
-// app.use(cors());
-// app.use(express.json());
-
-// // API Routes
-// app.use("/api/products", productRoutes);
-// app.use("/api/orders", orderRoutes);
-// app.use("/api/categories", categoryRoutes);
-
-// // API Home
-// app.get("/", (req, res) => {
-//   res.json({
-//     success: true,
-//     message: "Inderjani Online Bazar API is running!",
-//   });
-// });
-
-// // Health Check
-// app.get("/api/health", (req, res) => {
-//   res.json({
-//     success: true,
-//     message: "Server is healthy",
-//     database: "Connected",
-//   });
-// });
-
-// // Start server after database connection
-// async function startServer() {
-//   try {
-//     await connectDB();
-
-//     app.listen(PORT, () => {
-//       console.log(`Server running at http://localhost:${PORT}`);
-//     });
-//   } catch (error) {
-//     console.error("Server startup failed:", error.message);
-//     process.exit(1);
-//   }
-// }
-
-// startServer();
-
-
 require("dotenv").config();
 
 const express = require("express");
@@ -87,15 +31,26 @@ async function startServer() {
     const allowedOrigins = [
   "http://localhost:4000",
   "http://localhost:8081",
+  "https://inderjanionlinebazar.vercel.app",
 ];
 
     // 3. CORS Configuration
-    app.use(
-      cors({
-        origin: process.env.CLIENT_URL || "http://localhost:8081",
-        credentials: true,
-      })
-    );
+   const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests without an Origin header (e.g. curl or server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`CORS blocked this origin: ${origin}`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Admin-Key"],
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
     // 4. Better Auth Route
     // Must be before express.json()
