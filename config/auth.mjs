@@ -16,11 +16,10 @@ export const auth = betterAuth({
   trustedOrigins: [
     "http://localhost:4000",
     "http://localhost:8081",
-
-    // Expo app deep-link scheme
+     "http://localhost:8082",
+    "https://inderjanionlinebazar.vercel.app",
     "inderjanionlinebazarapp://",
 
-    // Expo development URLs only
     ...(process.env.NODE_ENV !== "production"
       ? ["exp://", "exp://**"]
       : []),
@@ -48,6 +47,15 @@ export const auth = betterAuth({
     requireEmailVerification: false,
     minPasswordLength: 8,
     maxPasswordLength: 128,
+  },
+
+  // Google Login
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      prompt: "select_account",
+    },
   },
 
   advanced: {
